@@ -9,9 +9,10 @@ import Register from './components/Regiister'
 import Home from './components/Home'
 import Dashboard from './components/Dashboard'
 import { Link } from "react-router-dom";
-import BookList from './components/BookList'
+// import BookList from './components/BookList'
 import EditBook from './components/Editbook'
 import CreateBook from './components/Createbook'
+import BookList from './components/BookList'
 
 
 
@@ -27,7 +28,7 @@ function App() {
       <Route path='/register' element={<Register/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path ='/books' element={<BookList/>}   /> 
-      <Route path ='/edit' element={<EditBook/>}   /> 
+      <Route path ='/edit/:id' element={<EditBook/>}   /> 
       <Route path ='/create' element={<CreateBook/>}   /> 
       
      </Routes>

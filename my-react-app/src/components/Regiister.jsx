@@ -50,7 +50,7 @@ const [formData, setFormData] = useState({
                 </h3>
 
                 <form onSubmit={handleSubmit} method="POST">
-                  {/* Name */}
+                  
                   <div className="mb-3">
                     <label htmlFor="name" className="form-label">
                      Username
@@ -100,7 +100,7 @@ const [formData, setFormData] = useState({
                     />
                   </div>
 
-                  {/* Class */}
+                 
                   <div className="mb-3">
                     <label className="form-label">
                       Role
@@ -113,10 +113,10 @@ const [formData, setFormData] = useState({
                     </select>
                   </div>
 
-                  {/* Registration Code */}
+                 
                  
 
-                  {/* Submit Button */}
+                 
                   <div className="text-center">
                     <button
                       type="submit"

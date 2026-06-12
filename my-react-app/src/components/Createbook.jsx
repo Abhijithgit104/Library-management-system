@@ -1,13 +1,17 @@
 import { useState } from "react";
 import api from "../api/api";
+import { useNavigate } from "react-router-dom";
+
 
 const CreateBook = () => {
 
   const [formData, setFormData] = useState({
     book_name: "",
+    author:"",
     published_date: "",
-    price: ""
+    price: 0
   });
+  const navigate=useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,6 +19,8 @@ const CreateBook = () => {
     try {
       await api.post("/api/book/", formData);
       alert("Book Added Successfully");
+      navigate('/books')
+
     } catch (error) {
       console.log(error);
     }
@@ -33,6 +39,17 @@ const CreateBook = () => {
             setFormData({
               ...formData,
               book_name:e.target.value
+            })
+          }
+        />
+        <input
+          className="form-control mb-3"
+          placeholder="Author"
+          value={formData.author}
+          onChange={(e)=>
+            setFormData({
+              ...formData,
+              author:e.target.value
             })
           }
         />

@@ -9,34 +9,28 @@ const EditBook = () => {
   const [book,setBook] = useState({
     book_name:"",
     published_date:"",
-    price:""
+    price:0
   });
 
-  useEffect(() => {
-
-    const fetchBook = async () => {
-
-      const response =
-      await api.get(`/api/book/${id}/`);
-
-      setBook(response.data);
-    };
-
+useEffect(() => {
+    const fetchBook = async (id) => {
+        const response = await api.get(`api/book/${id}`)
+        setBook(response.data)
+    }
+    fetchBook(id)
+    if (id) {
+    console.log("Fetching book with ID:", id); 
     fetchBook();
+  } else {
+    console.warn("ID param is currently undefined from the route configuration.");
+  }
+}, [id])
 
-  }, [id]);
-
-  const handleSubmit = async(e) => {
-
-    e.preventDefault();
-
-    await api.put(
-      `/api/book/${id}/`,
-      book
-    );
-
-    alert("Book Updated");
-  };
+const handleSubmit = async (e) => {
+    e.preventDefault()
+    await api.put(`api/book/${id}`, book) 
+    alert("Book Updated")
+}
 
   return (
     <div className="container mt-4">
@@ -48,6 +42,7 @@ const EditBook = () => {
         <input
           className="form-control mb-3"
           value={book.book_name}
+          placeholder="Book Name"
           onChange={(e)=>
             setBook({
               ...book,
@@ -55,9 +50,22 @@ const EditBook = () => {
             })
           }
         />
+        <input
+        type="date"
+          className="form-control mb-3"
+          value={book.published_date}
+          placeholder="Date"
+          onChange={(e)=>
+            setBook({
+              ...book,
+              published_date:e.target.value
+            })
+          }
+        />
 
         <input
           type="number"
+          placeholder="Price"
           className="form-control mb-3"
           value={book.price}
           onChange={(e)=>
@@ -68,7 +76,7 @@ const EditBook = () => {
           }
         />
 
-        <button className="btn btn-primary">
+        <button className="btn btn-primary" type="submit">
           Update
         </button>
 
