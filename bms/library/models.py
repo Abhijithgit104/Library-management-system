@@ -7,7 +7,7 @@ User=settings.AUTH_USER_MODEL
 class Book(models.Model):
 
     book_name=models.CharField(max_length=50)
-    author=models.CharField(null=True,blank=True)
+    author=models.CharField(User,null=True,blank=True)
     published_date=models.DateField(null=True,blank=True)
     price=models.IntegerField(null=True,blank=True)
     available_copies = models.IntegerField(default=1)

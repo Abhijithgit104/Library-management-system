@@ -133,7 +133,7 @@ useEffect(() => {
       <td>{book.price}</td>
 
       <td>
-        {role === "admin" ? (
+        {role !== "reader" ? (
           <>
           <Link to={`/edit/${book.id}`}>
             <button className="btn btn-primary btn-sm me-2">

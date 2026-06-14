@@ -7,7 +7,7 @@ const Navbar = () => {
   const role = localStorage.getItem("role");
 
   return (
-    <nav className="navbar navbar-dark bg-dark px-3">
+    <nav className="navbar navbar-dark bg-dark px-3 ">
       <Link
         className="navbar-brand"
         to="/dashboard"
@@ -56,8 +56,10 @@ console.log("Role:", role);
   }, []);
 
   return (
-    <div className="container mt-4">
-        <Navbar/>
+    <>
+    <Navbar/>
+    <div className="container mt-4 ">
+        
       <h2 className="mb-4">
         {role.charAt(0).toUpperCase() + role.slice(1)} Dashboard
       </h2>
@@ -139,6 +141,7 @@ console.log("Role:", role);
         )}
       </Row>
     </div>
+    </>
   );
 };
 

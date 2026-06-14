@@ -15,8 +15,11 @@ class BookView(APIView):
     permission_classes=[IsAuthenticated]
     def get(self,request):
         user=request.user
-
-        if user.role == 'reader' or 'admin':
+        print(request.user.username)
+        print(request.user.role)
+        print(Book.objects.filter(author=request.user.username))
+     
+        if user.role != 'author':
             books=Book.objects.all()
         else:
             books=Book.objects.filter(author=request.user.username)
@@ -29,14 +32,14 @@ class BookView(APIView):
      user = request.user
     
     
-     if user.role != 'admin':
-        return Response({"error": "Unauthorized"}, status=403)
+     if user.role == 'reader':
+        return Response({"error": "Access Denied"}, status=403)
         
      serializer = BookSerializer(data=request.data)
     
     
      if serializer.is_valid():
-        serializer.save()
+        serializer.save(author=request.user)
         return Response({"message": "Added successfully"}, status=201)
         
     
@@ -53,13 +56,22 @@ class BookDetail(APIView):
 
         if user.role == 'admin':
             books=Book.objects.get(pk=pk)
-            serializer=BookSerializer(books,data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response({"message":"Updated Successfully"},status=200)
-            return Response(serializer.errors)
+        elif user.role == 'author':
+            try:
+                books=Book.objects.get(pk=pk,author=request.user)
+            except :
+                return Response({"error":"Update your own book or book doesnot exists"},status=404)
+            
         else:
-            return Response({"error":"Permission denied"},status=403)
+            return Response({"error":"Access Denied"},status=403)
+        
+               
+        serializer=BookSerializer(books,data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=request.user)
+            return Response({"message":"Updated Successfully"},status=200)
+        return Response(serializer.errors)
+                     
         
     def delete(self,request,pk):
 
@@ -67,6 +79,12 @@ class BookDetail(APIView):
 
         if user.role == 'admin':
             books=Book.objects.get(pk=pk)
+        elif user.role == 'author':
+            try:
+             books=Book.objects.get(pk=pk,author=request.user)
+            except Book.DoesNotExist:
+                return Response({"error":"Delete your own book or book doesnot exists"},status=status.HTTP_404_NOT_FOUND)
+            
             books.delete()
             return Response({"message":"Deleted Successfully"},status=status.HTTP_204_NO_CONTENT)
         else:
@@ -77,6 +95,8 @@ class BorrowBookView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self,request):
+
+        user=request.user
         
         borrowed=Borrow.objects.all()
         serializer=BorrowSerializer(borrowed,many=True)
@@ -86,6 +106,8 @@ class BorrowCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, id):
+
+
 
         book = Book.objects.get(id=id)
 
